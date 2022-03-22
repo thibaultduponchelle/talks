@@ -1,0 +1,1090 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Do you really know XML?</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+					<textarea data-template>
+						Do you really know XML?
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						 A talk about XML? Seriously?
+						
+						 😬
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML is like Perl...
+						<p class="fragment">Old...</p>
+						<p class="fragment">Reliable...</p>
+						<p class="fragment">Ubiquitous..</p>
+						<p class="fragment">And not trendy! 😅 </p>
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						Since everybody knows everything about XML, so let's start with a game:
+						
+						<p class="fragment">Valid or not valid?! 🤔 </p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Blank after tag name?
+```xml 
+<root >
+```
+						<p class="fragment">Valid</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Blank before tag name?
+```xml 
+< root>
+```
+						<p class="fragment">Not valid!</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Attribute in closing tag?
+```xml
+</a attribute="value">
+```
+						<p class="fragment">Not valid!</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Valid XML?	
+```xml
+<person>
+	<name>Tib</name>
+	<age>35</age>
+</person>
+<person>
+	<name>Max</name>
+	<age>36</age>
+</person>
+```
+
+						<p class="fragment">Not valid!</p>
+						<p class="fragment">(multiple roots)</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						What is the value of attribute a?
+```xml
+<root>
+	<tag a="b" a="c"/>
+</root>
+```
+
+						<p class="fragment">
+						Actually it's not valid!
+						</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Comment in attribute?
+```xml
+<root>
+        <name attr="va<!-- Comment -->lue" />
+</root>
+```
+
+						<p class="fragment">Not valid!</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Dash in comment?
+```xml 
+<root>
+	<!-- - - Comment - - -->
+</root>
+```
+						<p class="fragment">Valid</p>
+					</textarea>
+				</section>
+
+
+
+				<section data-markdown>
+					<textarea data-template>
+						Nested comment?
+```xml 
+<root>
+	<!-- A comment with another <!-- comment --> inside -->
+</root>
+```
+
+						<p class="fragment">Not valid!</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Dash in comment?
+
+```xml
+<root>
+        <!-- Comment --->
+</root>
+```
+						<p class="fragment">Not valid!</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Comment at the end?
+```xml
+<?xml version="1.0"?>
+<root>
+	<name attr="value"/>
+</root>
+<!-- Comment -->
+```
+			
+						<p class="fragment">Valid</p>
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						Comment at the beginning?
+```xml
+<!-- Comment -->
+<?xml version="1.0"?>
+<root>
+	<name attr="value"/>
+</root>
+```
+			
+						<p class="fragment">Not valid!</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						We just had a look at some syntax things...
+						
+						<p class="fragment">Maybe realizing that XML is not that simple...</p>
+						
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						What about security now?
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Injections
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XXE with entities
+```xml [|4,5,11,12]
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd" [
+        <!ENTITY japh "<strong>Just another Perl hacker,</strong>">
+        <!ENTITY inc SYSTEM "inc.xml">
+        <!ENTITY pwd SYSTEM "/etc/passwd">
+]>
+
+<catalog version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <!--&japh;-->
+  &japh;
+  &inc;
+  &pwd;
+</catalog>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XXE with XInclude
+```xml [|7]
+<catalog version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xi="http://www.w3.org/2001/XInclude">
+   <book id="bk101">
+     <author>Chromatic</author>
+     <title>Modern Perl</title>
+   </book>
+
+   <xi:include href="/etc/passwd" parse="text"/>
+
+   <book id="bk112">
+     <author>Damian Conway</author>
+     <title>Perl Best Practices</title>
+   </book>
+</catalog>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Server Side Request Forgery
+```xml [|3,7]
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd" [
+	<!ENTITY ssrf SYSTEM "http://tryperl.pl">
+]>
+
+<catalog version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xi="http://www.w3.org/2001/XInclude">
+  &ssrf;
+</catalog>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						DoS
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Billion Laughs Attack
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE lolz [
+ <!ENTITY lol "lol">
+ <!ENTITY lol1 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
+ <!ENTITY lol2 "&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;">
+ <!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
+ <!ENTITY lol4 "&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;">
+ <!ENTITY lol5 "&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;">
+ <!ENTITY lol6 "&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;">
+ <!ENTITY lol7 "&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;">
+ <!ENTITY lol8 "&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;">
+ <!ENTITY lolz "&lol8;">
+]>
+<root>&lolz;</root>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Quadratic Blowup 
+```xml [|4,9,10]
+<?xml version="1.0"?>
+<!DOCTYPE blowup [
+
+<!ENTITY Boom "oOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoOoO...">
+
+]>
+
+<blowup>
+&Boom;&Boom;&Boom;&Boom;&Boom;&Boom;
+&Boom;&Boom;&Boom;&Boom;&Boom;&Boom;
+...
+</blowup>
+```
+			
+						(similar to Billion Laughs)
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Other threats
+						* XPath injections
+						* XSLT injections
+						* Decompression bomb (compressed input)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Now... Let's look at some lesser-known XML features.
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					Auto close tags
+
+```xml
+<?xml version="1.0"?>
+<root><a></a></root>
+```
+					When processed:
+```xml 
+<?xml version="1.0"?>
+<root><a/></root>
+```
+					</textarea>
+				</section>
+	
+				<section data-markdown>
+					<textarea data-template>
+						xml:space
+```xml
+<root>
+	<a/>
+	<b/>
+	<c xml:space="preserve">
+		<d/>
+		<e/>
+		<f/>
+	</c>
+</root>
+```
+Tell to parser about how ignorable are blanks
+```xml
+$ xmllint test.xml --noblanks                                                                                           master ✱ ◼
+<?xml version="1.0"?>
+<root><a/><b/><c xml:space="preserve">
+		<d/>
+		<e/>
+		<f/>
+	</c></root>
+```
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Default attribute
+```xml [|5]
+<?xml version="1.0"?>
+<!DOCTYPE root [
+<!ELEMENT root (elem)* >
+<!ELEMENT elem EMPTY>
+<!ATTLIST elem a (b|c) 'b'>
+]>
+<root>
+	<elem/>
+</root>
+```
+When processed (firefox, xmllint...): 
+```xml [|3] 
+<?xml version="1.0"?>
+<root>
+	<elem a="b"/>
+</root>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						With [XML::LibXML](https://metacpan.org/pod/XML::LibXML) you have to force completion: 
+
+```perl
+my $parser = XML::LibXML->new(complete_attributes => 1);
+```
+
+						With xmllint you have to use --dtdattr:
+```
+xmllint --dtdattr data.xml
+```
+						(security...)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						<img data-src="img/raptorcoin.png">
+
+						A word about some XML parsers available in Perl:
+
+						* [XML::LibXML](https://metacpan.org/pod/XML::LibXML) - Based on C libxml2
+						* [XML::Parser](https://metacpan.org/pod/XML::Parser) - Based on C expat
+						* [XML::Simple](https://metacpan.org/pod/XML::Simple) - Discouraged by his author
+       						* [XML::Twig](https://metacpan.org/pod/XML::Twig)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						<img data-src="img/camelia.png">
+
+						XML parsers available in Raku:
+						* [XML](https://github.com/raku-community-modules/XML) - Pure Raku implementation
+						* [LibXML](https://modules.raku.org/dist/LibXML:cpan:WARRINGD) - Based on C libxml2
+						* [XML::XPath](https://modules.raku.org/dist/XML::XPath:cpan:UFOBAT)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						My favorite is [XML::LibXML](https://metacpan.org/pod/XML::LibXML) ❤️
+					</textarea>
+				</section>
+
+
+
+				<section data-markdown>
+					<textarea data-template>
+						As I said, [XML::LibXML](https://metacpan.org/pod/XML::LibXML) is based on [libxml2](http://www.xmlsoft.org/)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						From libxml2, the list of possible parsed node types:
+						
+```
+	* XML_ELEMENT_NODE
+	* XML_ATTRIBUTE_NODE          
+	* XML_TEXT_NODE               
+	* XML_CDATA_SECTION_NODE      
+	* XML_ENTITY_REF_NODE         
+	* XML_ENTITY_NODE             
+	* XML_PI_NODE                 
+	* XML_COMMENT_NODE            
+	* XML_DOCUMENT_NODE           
+	* XML_DOCUMENT_TYPE_NODE      
+	* XML_DOCUMENT_FRAG_NODE      
+```
+						(include/libxml/tree.h)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Plus some others:
+```
+	* XML_NOTATION_NODE           
+	* XML_HTML_DOCUMENT_NODE      
+	* XML_DTD_NODE                
+	* XML_ELEMENT_DECL            
+	* XML_ATTRIBUTE_DECL          
+	* XML_ENTITY_DECL             
+	* XML_NAMESPACE_DECL          
+	* XML_XINCLUDE_START          
+	* XML_XINCLUDE_END            
+	* XML_DOCB_DOCUMENT_NODE
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						(I save you from *internal* types)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Do you know all these types? 
+
+						<p class="fragment"><img src="img/moue.png"/></p>
+						<p class="fragment">(I still love you, old meme)</p>
+
+					</textarea>
+				</section>
+
+
+				<section data-markdown>
+					<textarea data-template>
+						With [XML::LibXML](https://metacpan.org/pod/XML::LibXML) you can get them with:
+						
+
+```perl
+$child->nodeType
+```
+						And also partially (inconsistent) with:
+```perl
+$child->nodeName
+```
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+
+						With xmllint you can get them (more or less) with:
+```
+$ xmllint --debug data.xml
+```
+					</textarea>
+				</section>
+	
+							<section data-markdown>
+					<textarea data-template>
+						e.g. List types of first level and second level children:
+
+```perl
+use 5.010;
+use XML::LibXML;
+
+my $parser = XML::LibXML->new();
+my $tree = $parser->parse_file("data.xml");
+
+foreach my $flc ($tree->childNodes()) {
+  say "First level child nodes types: " . $flc->nodeType;
+  foreach $slc ($flc->childNodes()) {
+    say " Second level child nodes types: " . $slc->nodeType;
+  }
+}
+
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Some types are obvious...
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_DOCUMENT_NODE
+
+						The document itself
+
+```perl
+use 5.010;
+use XML::LibXML;
+
+my $parser = XML::LibXML->new();
+my $tree = $parser->parse_file("data.xml");
+
+say "Tree node type: " . $tree->nodeType;
+say "Tree node name: " . $tree->nodeName;
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_ELEMENT_NODE
+```
+<tag></tag> or <tag/>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_ATTRIBUTE_NODE          
+```
+<tag attribute="value">
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						With [XML::LibXML](https://metacpan.org/pod/XML::LibXML) you can do something like:
+
+```perl
+use 5.010;
+use XML::LibXML;
+
+my $parser = XML::LibXML->new();
+my $tree = $parser->parse_file("data.xml");
+
+foreach my $flc ($tree->childNodes()) {
+        foreach my $att ($flc->attributes()) {
+                say "Attribute name: " . $att->nodeName;
+                say "Attribute value: " . $att->value;
+        }
+}
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_TEXT_NODE               
+```xml
+Some<a>text</a> or <b att="Some Text"/>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_COMMENT_NODE
+```
+<!-- comment -->
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_CDATA_SECTION_NODE
+
+```
+<![CDATA[<sender>John Smith</sender>]]>
+```
+
+						(CDATA is interpreted literally)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_ENTITY_REF_NODE
+```
+&entity;
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						With [XML::LibXML](https://metacpan.org/pod/XML::LibXML) you have to force entity expansion: 
+
+```perl
+my $parser = XML::LibXML->new(expand_entities => 1);
+```
+						(security...)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_DTD_NODE
+```
+<!DOCTYPE book PUBLIC "blahblah" "http://www.example.com/docbookx.dtd" [
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+
+						XML_ELEMENT_DECL
+```
+<!ELEMENT element-name EMPTY>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+
+						XML_ATTRIBUTE_DECL
+```
+<!ATTLIST image height CDATA #REQUIRED>
+```
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_ENTITY_DECL
+```
+<!ENTITY japh "<strong>Just Another Perl Hacker,</strong>">
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+			
+						XML_NAMESPACE_DECL
+```
+<catalog xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+```
+						
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+
+						XML_PI_NODE
+
+```
+<?xml-stylesheet href="style.css">
+```
+(PI stands for Processing Instruction)
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Because you can stylize a XML with a stylesheet:
+
+```
+<?xml-stylesheet href="style.css">
+<root>
+	<huge>Huge</huge>
+	<bold>Bold</bold>
+</root>
+```
+With `style.css`:
+```css
+root {
+	text-align: center;
+}
+huge {
+	font-size: 400%;
+	display: block;
+}
+bold { 
+	font-weight: bold;
+	display: block;
+}
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Result:
+
+						<img src="img/css.png"/>
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						XML_XINCLUDE_START / XML_XINCLUDE_END
+```
+<xi:include href="inc.xml"/>
+```
+						Added by the parser when processing the XIncludes
+
+						Can be disabled with:
+```
+$ xmllint --xinclude --noxincludenode
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						With [XML::LibXML](https://metacpan.org/pod/XML::LibXML) you have to force xincludes processing: 
+
+```perl [|5]
+my $parser = XML::LibXML->new();
+
+my $tree = $parser->parse_file("data.xml");
+
+$parser->process_xincludes($tree);
+```
+
+						(security...)
+					</textarea>
+				</section>
+
+
+
+				<section data-markdown>
+					<textarea data-template>
+						OK it was not so hard until now...  But what about:
+						* XML_DOCUMENT_TYPE_NODE
+						* XML_DOCUMENT_FRAG_NODE
+						* XML_DOCB_DOCUMENT_NODE
+						* XML_ENTITY_NODE
+						* XML_NOTATION_NODE
+						* XML_HTML_DOCUMENT_NODE
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+
+						XML_DOCUMENT_TYPE_NODE
+
+						Deprecated, use XML_DTD_NODE instead
+
+						<p class="fragment">First trap dodged! 😏 </p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_DOCUMENT_FRAG_NODE
+
+						Never read, only *created* and used when *writing* XML.
+
+						<p class="fragment">This is not fair! 🤨 </p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_DOCB_DOCUMENT_NODE
+
+```
+#ifdef LIBXML_DOCB_ENABLED
+   ,XML_DOCB_DOCUMENT_NODE=	21
+#endif
+```
+
+Deprecated, related to docbooks 
+
+						<p class="fragment"> 😐 </p>
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_ENTITY_NODE
+
+						<p class="fragment">It's a mystery!</p>
+
+						<p class="fragment"> 😵 </p>
+
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						XML_NOTATION_NODE
+```
+<!NOTATION GIF SYSTEM "GIF">
+```
+						An obscure XML feature for file association
+
+						<p class="fragment"> 🥴 </p>
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						XML_HTML_DOCUMENT_NODE
+
+						The document itself but in *HTML context* 
+```
+$ xmllint --html data.html
+```
+
+						<p class="fragment"> 🧐 </p>
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						It took me some time to understand these... 🤓
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Why do I dug into XML spec?
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Because I wrote [XML::Minifier](https://metacpan.org/pod/XML::Minifier) 
+					
+						😊
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Minifying XML is everything but obvious! 
+
+						😩
+						
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						You probably agree with me to minify this XML:
+```xml
+<people>
+	<person>
+		<name>Tib</name>
+		<age>35</age>
+	</person>
+	<person>
+		<name>Max</name>
+		<age>36</age>
+	</person>
+</people>
+```
+						Like this:
+```xml
+<people><person><name>Tib</name><age>35</age></person><person><name>Max</name><age>36</age></person></people>
+```
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Seems obvious because humans put data in leafs!
+						<p class="fragment">But it is wrong according to XML spec...</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Not ignorable blanks (XML spec):
+```xml
+<people>
+   ❌	<person>
+   ❌		<name>Tib</name>
+   ❌		<age>35</age>
+   ❌	</person>
+   ❌	<person>
+   ❌		<name>Max</name>
+   ❌		<age>36</age>
+   ❌	</person>   ❌
+</people>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						If you still hesitate, think HTML!
+```xml
+<div class="ephemeral"> 
+	To be <strong>convinced</strong> 
+	you should think about 
+	<a href="http://example.com">HTML</a> 
+	document where tags and text 
+	are completely mixed together!
+</div>
+```
+						Lot of text ouside leafs!
+				
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						If only we had a DTD or a schema describing the XML structure...
+```xml [|4,13]
+<!DOCTYPE ephemeral [
+<!ELEMENT people     (person*)>
+<!ELEMENT person     (name,age)>
+<!ELEMENT name       (#PCDATA)>
+<!ELEMENT age        (#PCDATA)>
+]>
+<people>
+        <person>
+                <name>Tib</name>
+                <age>35</age>
+        </person>
+        <person>
+                <name>    </name> <!-- Will stay --> 
+                <age>36</age>
+        </person>
+</people>
+```
+						(`#PCDATA` is text with meaningful whitespace)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Or with `xml:space` attributes:
+```xml [|1,3,4,7,8]
+<people xml:space="default">
+        <person>
+                <name xml:space="preserve">Tib</name>
+                <age xml:space="preserve">35</age>
+        </person>
+        <person>
+                <name xml:space="preserve">Max</name>
+                <age xml:space="preserve">36</age>
+        </person>
+</people>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						xml:space can be in DTD:
+
+```xml [|3,5,6]
+<!DOCTYPE ephemeral [
+<!ELEMENT people     (person*)>
+<!ATTLIST people xml:space (default|preserve) "default">
+<!ELEMENT person     (name,age)>
+<!ATTLIST name xml:space (default|preserve) "preserve">
+<!ATTLIST age xml:space (default|preserve) "preserve">
+]>
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Even without these hints, it's still valuable approach
+						<p class="fragment">because it's DWIM (Do What I Mean) for humans</p>
+						<p class="fragment">but it is clearly "lossy minification"</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Going further in DWIM
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Protect (text) siblings:
+```xml
+<root>
+	<tag>Protect my empty <strong>sibling</strong>       </tag>
+</root>
+```
+						Minified as:
+
+```xml
+<root><tag>Protect my empty <strong>sibling</strong>       </tag></root>
+```
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Protecting leafs:
+```xml
+<root>
+	<tag>    </tag>
+</root>
+```
+						Minified as:
+```xml
+<root><tag>    </tag></root>
+```
+						(leafs are where humans usually put data in XML)
+	
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						This "DWIM mode" is just a part of [XML::Minifier](https://metacpan.org/pod/XML::Minifier) 
+
+						<p class="fragment">There is a "lossy-less" minification</p>
+						
+						<p class="fragment">and also an "agressive mode"</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						But as you may conclude with me
+						<p class="fragment">the journey is more interesting than the destination!</p>
+
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						Links:
+						- [XML Spec](https://www.w3.org/TR/REC-xml/)
+						- [XML::LibXML](https://metacpan.org/pod/XML::LibXML)
+						- [libxml2](http://www.xmlsoft.org/)
+						- [XML::Minifier](https://metacpan.org/pod/XML::Minifier)
+					</textarea>
+				</section>
+	
+
+				<section data-markdown>
+					<textarea data-template>
+						Thank you!
+
+						<img src="img/camel.jpg"/>
+					</textarea>
+				</section>
+	
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
