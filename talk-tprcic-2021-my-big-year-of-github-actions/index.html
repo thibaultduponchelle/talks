@@ -1,0 +1,274 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>My big year of GitHub actions</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+					<textarea data-template>
+						My big year of GitHub actions
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					08 august 2019
+
+					[GitHub actions become free for public repos](https://github.blog/2019-08-08-github-actions-now-supports-ci-cd/)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					29 december 2019 
+
+					For The Record: my first GitHub workflow
+						
+					<img data-src="img/first.png">
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					25 february 2020
+
+					[Act now supports GitHub actions v2](https://github.com/nektos/act/)
+
+					<img data-src="img/act.png">
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						28 april 2020
+
+						A dashboard to nightly test 226 aliens: [aliens-ci](https://github.com/thibaultduponchelle/aliens-ci)
+					
+						<img data-src="img/dashboard.png">
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					GitHub Actions are free and unlimited...
+
+					How much is "unlimited" exactly?
+
+					<img data-src="img/question.png">
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					The answer ~is~ was:
+
+					QUEUING! ⏳
+					
+					(and GNU/Linux workers)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					Then I tried:
+					
+					- 3000 jobs
+					- Build CPAN modules (the river) 
+					- Every night
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					14 may 2020 
+
+					An experimental dashboard for the river: [river-ci](https://github.com/thibaultduponchelle/river-ci)
+
+					<img data-src="img/miniriverci.png">
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+					14 may 2020 
+					
+					Switch builds to my custom [perl-blead](https://hub.docker.com/r/tibtibdocker/perl-blead) ([source](https://github.com/thibaultduponchelle/docker-perl-blead))
+
+					<img data-src="img/dockerhub.png">
+					<img data-src="img/perlblead.png">
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						14 may 2020
+					
+						Messy CI Workflows: [A set of Perl workflows examples](https://github.com/thibaultduponchelle/messy-ci-workflows)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					<img data-src="img/messyci.png">
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					17 september 2020 
+
+					GitHub announcement: release of [cli 1.0](https://github.blog/2020-09-17-github-cli-1-0-is-now-available/)
+
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					01 october 2020
+
+					GitHub new policy: Auto disable scheduled workflows
+					
+					<img data-src="img/inactive.png">
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					23 october 2020 
+
+					<img data-src="img/spam.png">
+
+					🤯
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						02 november 2020
+						
+						Travis CI new policy: [New pricing model](https://blog.travis-ci.com/2020-11-02-travis-ci-new-billing)
+
+						🥺  😕 😒
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						20 november 2020
+						
+						Docker new policy: [Download pull limit](https://docs.docker.com/docker-hub/download-rate-limit/)
+
+						😕 😕 😕
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						8 february 2021
+
+						[Crypto-mining attack through Pull Request](https://dev.to/thibaultduponchelle/the-github-action-mining-attack-through-pull-request-2lmc)
+						
+						☠ 🙀 😬
+
+						(you could [bypass your limits](https://github.com/thibaultduponchelle/parallel-runners/pull/1) with pull requests)
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						19 march 2021 
+
+						My own GitHub action: [Upload to CPAN](https://dev.to/thibaultduponchelle/new-upload-to-cpan-github-action-4h8j) ([source](https://github.com/thibaultduponchelle/action-upload-to-cpan))
+						
+						<img data-src="img/auto.png">
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					15 april 2021 
+
+					GitHub announced [gh workflow subcommand](https://github.blog/2021-04-15-work-with-github-actions-in-your-terminal-with-github-cli/) in its **cli**
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					16 april 2021 
+
+					I re-enable my workflows with this one-liner:
+
+					```bash
+					gh workflow list --all --limit 10000 | cut -d$'\t' -f3 | tr "\n" "\0" | xargs -0 -n1 gh workflow enable
+					```
+
+					💪 🤷 🤫 😏
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						22 april 2021 
+
+						GitHub new policy: [Combat bad actors](https://github.blog/2021-04-22-github-actions-update-helping-maintainers-combat-bad-actors/)
+						<br/><br/><br/>
+						"Pull requests from first-time contributors will **require manual approval** from a repository collaborator with write access **before any Actions workflows run**"
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						02 june 2021
+						
+						Slowdown of scheduled jobs
+						
+						<img data-src="img/slowdown.png">
+
+						Supposed to run every 20 minutes
+						```yml
+						on:
+						  push:
+						  schedule:
+						    - cron: '*/20 * * * *'
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						04 june 2021
+						
+						Too much queuing now leads to errors
+						
+						<img data-src="img/toomany.png">
+
+						(or jobs get ignored)
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						Thank you!
+
+						<img data-src="img/camelfun.png">
+					</textarea>
+				</section>
+
+
+
+
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
