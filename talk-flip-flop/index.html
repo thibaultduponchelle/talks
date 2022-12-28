@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>flip flop</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+					<textarea data-template>
+						flip flop
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+				Flip flop (until death)
+
+				```perl
+sub flip {
+        print "flip\n";
+        flop();
+}
+
+sub flop {
+        print "flop\n";
+        flip();
+}
+
+flip();
+				```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Using a parent variable (lexically or package variable)
+
+						```perl
+my $shoe;
+
+sub flipflop() {
+	if ($shoe eq "flip") {
+		$shoe = "flop";
+	} else {
+		$shoe = "flip";
+	}
+
+	print "$shoe\n";
+}
+
+while (1) { flipflop(); }
+						```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Using code references in @INC
+
+						```perl
+BEGIN {
+	unshift @INC, \&flip, \&flop;
+}
+
+sub flip() { print "flip\n"; }
+sub flop() { print "flop\n"; }
+
+while (1) { 
+	require strict; 
+	delete $INC{'strict.pm'}; 
+}
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						Using state
+
+						```perl
+use feature 'state';
+
+sub flipflop() {
+        state $shoe;
+        if ($shoe eq "flip") {
+                $shoe = "flop";
+        } else {
+                $shoe = "flip";
+        }
+        print "$shoe\n";
+        goto &flipflop;
+}       
+
+flipflop();
+						```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Closure
+
+						```perl
+sub flip_the_flop {
+        my $shoe = shift;
+        my $boot = shift;
+        
+        return sub { 
+	        print "$shoe\n"; 
+	        ($shoe, $boot) = ($boot, $shoe); 
+        }
+}       
+
+my $flipflop = flip_the_flop("flip", "flop");
+while (1) { &$flipflop(); }
+						```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						Writing to DATA
+
+						```perl
+my $start = tell DATA;
+close DATA; 
+
+open DATA, '<', \$shoe;
+$shoe = "flip";
+
+while (1) {
+        print <DATA>, "\n";;
+        if ($shoe =~ m/flip$/) {
+                $shoe .= "flop";
+        } else {
+                $shoe .= "flip";
+        }
+}
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					Reading and re-reading DATA
+					```perl
+my $ptr = tell DATA;
+
+while (1) {
+	print <DATA>;
+	seek DATA, $ptr, 0;
+}
+
+__DATA__
+flip
+flop
+```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+					</textarea>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
