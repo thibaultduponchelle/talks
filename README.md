@@ -6,3 +6,6 @@
 ## TEM 2021
 - [Once upond Perl acronyms](https://thibaultduponchelle.github.io/talks/talk-tem-2021-once-upon-perl-acronyms)
 - [Do you really know XML?](https://thibaultduponchelle.github.io/talks/talk-tem-2021-do-you-really-know-xml)
+
+## LPW 2024
+- [This is a camel](https://thibaultduponchelle.github.io/talks/talk-this-is-a-camel)
