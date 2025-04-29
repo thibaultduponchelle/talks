@@ -1,6 +1,6 @@
 # Talks at conferences
 ## PTS 2025
-- [Hello I'm Tib](https://thibaultduponchelle.github.io/talks/talk-pts-2025-tib)
+- [Hello I'm Tib](https://thibaultduponchelle.github.io/talks/talk-pts-2025-hello-im-tib)
 - [Answering questions about CPAN that nobody asked](https://thibaultduponchelle.github.io/talks/talk-tprcic-2021-answers-to-cpan-questions-that-nobody-asked)
 - [Answering questions about CPAN that nobody asked - the sequel](https://thibaultduponchelle.github.io/talks/talk-pts-2025-answers-to-cpan-questions-that-nobody-asked-the-sequel)
 
