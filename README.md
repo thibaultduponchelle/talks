@@ -1,4 +1,8 @@
 # Talks at conferences
+## PTS 2025
+- [Hello I'm Tib](https://thibaultduponchelle.github.io/talks/talk-pts-2025-tib)
+- [Answering questions about CPAN that nobody asked](https://thibaultduponchelle.github.io/talks/talk-tprcic-2021-answers-to-cpan-questions-that-nobody-asked)
+
 ## LPRW 2024
 - [This is a camel](https://thibaultduponchelle.github.io/talks/talk-lprw-2024-this-is-a-camel)
 
