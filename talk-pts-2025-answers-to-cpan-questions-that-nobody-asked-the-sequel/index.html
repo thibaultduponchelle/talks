@@ -188,6 +188,30 @@
 				
 				<section data-markdown>
 					<textarea data-template>
+					Except if source is a git URL!
+					```text [1|4]
+					$ cpm install https://github.com/thibaultduponchelle/Acme-No-META.git
+					Cloning https://github.com/thibaultduponchelle/Acme-No-META.git
+					-> OK
+					Distribution does not have META.json nor META.yml
+					Failed to fetch/configure distribution
+					```
+					</textarea>
+				</section>
+				
+				<section data-markdown>
+					<textarea data-template>
+					This is known and "by design"
+					
+					<img data-src="img/skaji-some-background.png">	
+					
+					([#10](https://github.com/skaji/cpm/issues/210), [#250](https://github.com/skaji/cpm/pull/250))		
+					</textarea>
+				</section>
+				
+				
+				<section data-markdown>
+					<textarea data-template>
 					Also in 2025, it's not allowed anymore (not indexed)
 					<img data-src="img/no-meta.png">
 					</textarea>
@@ -289,15 +313,20 @@
 				
 				<section data-markdown>
 					<textarea data-template>
-					Actually it is not different than a TRIAL 
+					Like would be a TRIAL
 					</textarea>
 				</section>
 				
 				<section data-markdown>
 					<textarea data-template>
-					MetaCPAN Index is too nice?
+					MetaCPAN Index is a bit *too nice*?
 					
 					🫶
+
+					Or cpanm/cpm in their way of querying it?
+
+					🤔
+
 					</textarea>
 				</section>
 				
@@ -313,6 +342,8 @@
 						<img data-src="img/common-belief-not-possible.png">
 						
 						(even miyagawa is confused!)
+						
+						([#683](https://github.com/miyagawa/cpanminus/pull/683))
 					</textarea>
 				</section>
 				
@@ -360,6 +391,9 @@
 					DONE configure (0.087sec) Acme-Version-Same-0.01-patched
 					DONE install   (0.178sec) Acme-Version-Same-0.01-patched
 					1 distribution installed.
+					```
+					
+					([#255](https://github.com/skaji/cpm/pull/255))
 					</textarea>
 				</section>	
 				
@@ -449,6 +483,10 @@
 						+
 						
 						[CPAN::Uploader](https://metacpan.org/pod/CPAN::Uploader) (RJBS) 🚀
+						
+						+ 
+						
+						Containerized PAUSE 🐋
 						
 						
 					</textarea>
